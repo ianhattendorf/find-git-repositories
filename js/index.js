@@ -1,24 +1,7 @@
-const { findGitRepos } = require('../build/Release/findGitRepos.node');
+const { findGitRepos } = require('bindings')('findGitRepos');
 
-module.exports = (startingPath, progressCallback, { throttleTimeoutMS = 0 } = {}) => new Promise((resolve, reject) => {
-  if (!startingPath && startingPath !== '') {
-    reject(new Error('Must provide starting path as first argument.'));
-    return;
-  }
+const result = findGitRepos("C:\\my\\repos", (arg1) => console.log('PROGRESS:', arg1));
+console.log({ result });
+result.then(console.log).catch(console.error);
 
-  if (!progressCallback) {
-    reject(new Error('Must provide progress callback as second argument.'));
-    return;
-  }
-
-  try {
-    findGitRepos(
-      startingPath,
-      throttleTimeoutMS,
-      progressCallback,
-      resolve
-    );
-  } catch (error) {
-    reject(error);
-  }
-});
+module.exports = findGitRepos;
